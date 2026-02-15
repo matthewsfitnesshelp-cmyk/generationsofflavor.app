@@ -9,7 +9,6 @@
     <meta property="og:title" content="You're invited to a Family Cookbook!">
     <meta property="og:description" content="Someone wants you to join their family cookbook on Generations of Flavor. Tap to join!">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="https://generationsofflavor.app/og-image.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,12 +40,11 @@
             overflow: hidden;
         }
 
-        /* Warm grain texture overlay */
         body::before {
             content: '';
             position: fixed;
             inset: 0;
-            background: 
+            background:
                 radial-gradient(ellipse at 20% 0%, rgba(212, 146, 11, 0.12) 0%, transparent 60%),
                 radial-gradient(ellipse at 80% 100%, rgba(107, 143, 113, 0.08) 0%, transparent 50%);
             pointer-events: none;
@@ -62,7 +60,6 @@
             text-align: center;
         }
 
-        /* Book icon */
         .icon {
             font-size: 56px;
             margin-bottom: 8px;
@@ -89,7 +86,6 @@
             margin-bottom: 32px;
         }
 
-        /* Invite code card */
         .code-card {
             background: rgba(212, 146, 11, 0.1);
             border: 1px solid rgba(212, 146, 11, 0.2);
@@ -115,7 +111,6 @@
             word-break: break-all;
         }
 
-        /* Primary CTA */
         .btn-primary {
             display: block;
             width: 100%;
@@ -138,9 +133,7 @@
             box-shadow: 0 6px 28px rgba(212, 146, 11, 0.4);
         }
 
-        .btn-primary:active {
-            transform: translateY(0);
-        }
+        .btn-primary:active { transform: translateY(0); }
 
         .divider {
             display: flex;
@@ -161,7 +154,6 @@
             background: rgba(250, 246, 240, 0.1);
         }
 
-        /* Secondary CTA */
         .btn-secondary {
             display: block;
             width: 100%;
@@ -178,9 +170,7 @@
             transition: background 0.15s;
         }
 
-        .btn-secondary:hover {
-            background: rgba(107, 143, 113, 0.25);
-        }
+        .btn-secondary:hover { background: rgba(107, 143, 113, 0.25); }
 
         .footer-note {
             margin-top: 32px;
@@ -189,12 +179,6 @@
             line-height: 1.5;
         }
 
-        .footer-note a {
-            color: var(--amber);
-            text-decoration: none;
-        }
-
-        /* Status messages */
         .status {
             display: none;
             padding: 12px 16px;
@@ -222,12 +206,11 @@
             color: var(--terracotta);
         }
 
-        /* Manual code copy */
         .copy-hint {
-            display: none;
-            margin-top: 16px;
+            margin-top: 20px;
             padding: 14px;
             background: rgba(250, 246, 240, 0.04);
+            border: 1px solid rgba(250, 246, 240, 0.06);
             border-radius: 12px;
             font-size: 13px;
             color: rgba(250, 246, 240, 0.5);
@@ -243,8 +226,17 @@
             cursor: pointer;
         }
 
-        .copy-hint code:hover {
-            color: var(--amber-light);
+        .copy-hint code:hover { color: var(--amber-light); }
+
+        .no-code {
+            display: none;
+            padding: 16px;
+            background: rgba(193, 123, 84, 0.1);
+            border: 1px solid rgba(193, 123, 84, 0.2);
+            border-radius: 12px;
+            color: var(--terracotta);
+            font-size: 14px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -254,9 +246,13 @@
         <h1>You're Invited!</h1>
         <p class="subtitle">Someone wants you to join their family cookbook on Generations of Flavor</p>
 
+        <div class="no-code" id="noCode">
+            No invite code found in this link. Ask the person who invited you to send the link again.
+        </div>
+
         <div class="code-card" id="codeCard">
             <div class="code-label">Invite Code</div>
-            <div class="code-value" id="codeDisplay">—</div>
+            <div class="code-value" id="codeDisplay">...</div>
         </div>
 
         <div class="status" id="statusMsg"></div>
@@ -272,89 +268,96 @@
         </a>
 
         <div class="copy-hint" id="copyHint">
-            Already have the app? Open it and enter this code:
-            <code id="copyCode" onclick="copyCode()">—</code>
+            Already have the app? Open it and enter this code manually:
+            <code id="copyCode" onclick="doCopy()">...</code>
         </div>
 
         <p class="footer-note">
             Generations of Flavor is a family cookbook app where families share
-            and preserve their recipes together.<br><br>
-            <a href="https://generationsofflavor.app">Learn more</a>
+            and preserve their recipes together.
         </p>
     </div>
 
     <script>
-        // Extract invite code from URL path: /join/CODE or /join/?code=CODE
+        /**
+         * Extract invite code from URL.
+         *
+         * Works with any base path — finds "join" in the path and takes
+         * the segment after it:
+         *   /generationsofflavor.app/join/VACURA-7X3K  → VACURA-7X3K
+         *   /join/VACURA-7X3K                          → VACURA-7X3K
+         *   ?code=VACURA-7X3K                          → VACURA-7X3K
+         */
         function getInviteCode() {
-            const path = window.location.pathname;
-            const segments = path.split('/').filter(Boolean);
+            var path = window.location.pathname;
+            var segments = path.split('/').filter(function(s) { return s.length > 0; });
 
-            // /join/VACURA-7X3K → segments = ["join", "VACURA-7X3K"]
-            if (segments.length >= 2 && segments[0] === 'join') {
-                return segments[1].toUpperCase();
+            // Find "join" in path and grab the next segment
+            for (var i = 0; i < segments.length; i++) {
+                if (segments[i].toLowerCase() === 'join' && i + 1 < segments.length) {
+                    return segments[i + 1].toUpperCase();
+                }
             }
 
-            // Fallback: ?code=VACURA-7X3K
-            const params = new URLSearchParams(window.location.search);
-            const code = params.get('code');
+            // Fallback: query param ?code=XYZ
+            var params = new URLSearchParams(window.location.search);
+            var code = params.get('code');
             if (code) return code.toUpperCase();
 
             return null;
         }
 
-        const inviteCode = getInviteCode();
-        const codeDisplay = document.getElementById('codeDisplay');
-        const copyCode = document.getElementById('copyCode');
-        const statusMsg = document.getElementById('statusMsg');
-        const copyHint = document.getElementById('copyHint');
+        var inviteCode = getInviteCode();
 
+        // Update the UI
         if (inviteCode) {
-            codeDisplay.textContent = inviteCode;
+            document.getElementById('codeDisplay').textContent = inviteCode;
             document.getElementById('copyCode').textContent = inviteCode;
         } else {
-            codeDisplay.textContent = 'No code found';
+            document.getElementById('codeCard').style.display = 'none';
+            document.getElementById('noCode').style.display = 'block';
+            document.getElementById('openAppBtn').style.display = 'none';
+            document.getElementById('copyHint').style.display = 'none';
         }
 
         // Play Store URL (update when published)
-        const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.jake.familycookbook';
-        // For now, since not on store yet, point to the website
+        var playStoreUrl = 'https://play.google.com/store/apps/details?id=com.jake.familycookbook';
         document.getElementById('downloadBtn').href = playStoreUrl;
 
         function openApp() {
-            if (!inviteCode) {
-                statusMsg.className = 'status fallback';
-                statusMsg.textContent = 'No invite code found in the link.';
-                return;
-            }
+            if (!inviteCode) return;
 
-            // Show "opening" status
+            var statusMsg = document.getElementById('statusMsg');
             statusMsg.className = 'status opening';
             statusMsg.textContent = 'Opening Generations of Flavor...';
 
-            // Try the custom scheme deep link
-            const deepLink = 'familycookbook://join/' + inviteCode;
+            // Custom scheme deep link
+            var deepLink = 'familycookbook://join/' + inviteCode;
 
-            // Use an iframe trick for reliability across browsers
-            const iframe = document.createElement('iframe');
-            iframe.style.display = 'none';
-            iframe.src = deepLink;
-            document.body.appendChild(iframe);
+            // Try 1: Intent URL (most reliable on Android)
+            // This tells Android exactly which app to open and falls back gracefully
+            var intentUrl = 'intent://join/' + inviteCode +
+                '#Intent;scheme=familycookbook;package=com.jake.familycookbook;end';
 
-            // Also try window.location as backup
-            setTimeout(function() {
+            // Detect Android
+            var isAndroid = /Android/i.test(navigator.userAgent);
+
+            if (isAndroid) {
+                // Use intent:// URL — Android's most reliable deep link method
+                window.location.href = intentUrl;
+            } else {
+                // iOS or other: try custom scheme directly
                 window.location.href = deepLink;
-            }, 100);
+            }
 
-            // If still here after 1.5 seconds, app probably isn't installed
+            // If still here after 2 seconds, show fallback
             setTimeout(function() {
-                document.body.removeChild(iframe);
                 statusMsg.className = 'status fallback';
-                statusMsg.textContent = "Couldn't open the app. You may need to download it first.";
-                copyHint.style.display = 'block';
-            }, 1500);
+                statusMsg.textContent = "Couldn't open the app. You may need to download it first, or copy the code below and enter it manually.";
+            }, 2000);
         }
 
-        function copyCode() {
+        function doCopy() {
             if (inviteCode && navigator.clipboard) {
                 navigator.clipboard.writeText(inviteCode).then(function() {
                     document.getElementById('copyCode').textContent = 'Copied!';
@@ -366,10 +369,9 @@
         }
 
         // Auto-attempt to open app on mobile
-        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
         if (isMobile && inviteCode) {
-            // Small delay to let the page render first
-            setTimeout(openApp, 500);
+            setTimeout(openApp, 600);
         }
     </script>
 </body>
