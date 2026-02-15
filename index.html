@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generations of Flavor — Family Cookbook App</title>
+    <meta name="description" content="Share and preserve your family's recipes together. A collaborative cookbook app for families.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --amber: #D4920B;
+            --amber-light: #F5C842;
+            --sage: #6B8F71;
+            --cream: #FAF6F0;
+            --espresso: #2A2320;
+            --warm-gray: #8A8077;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--espresso);
+            color: var(--cream);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse at 30% 20%, rgba(212, 146, 11, 0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 480px;
+            padding: 60px 32px;
+            text-align: center;
+        }
+
+        .icon { font-size: 64px; margin-bottom: 16px; }
+
+        h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 36px;
+            color: var(--amber-light);
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+
+        p {
+            font-size: 16px;
+            color: rgba(250, 246, 240, 0.6);
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 10px 24px;
+            background: rgba(212, 146, 11, 0.12);
+            border: 1px solid rgba(212, 146, 11, 0.2);
+            border-radius: 24px;
+            color: var(--amber);
+            font-weight: 600;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">📖</div>
+        <h1>Generations of Flavor</h1>
+        <p>A family cookbook app where families share, preserve, and discover their recipes together. Create your family cookbook and invite everyone to contribute.</p>
+        <span class="badge">Coming Soon to Google Play</span>
+    </div>
+</body>
+</html>
