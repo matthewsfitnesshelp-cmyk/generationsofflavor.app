@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Family Cookbook — Generations of Flavor</title>
+
+    <!-- Open Graph for link previews in messages -->
+    <meta property="og:title" content="You're invited to a Family Cookbook!">
+    <meta property="og:description" content="Someone wants you to join their family cookbook on Generations of Flavor. Tap to join!">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://generationsofflavor.app/og-image.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --amber: #D4920B;
+            --amber-light: #F5C842;
+            --sage: #6B8F71;
+            --terracotta: #C17B54;
+            --cream: #FAF6F0;
+            --linen: #F3EDE4;
+            --charcoal: #3D3530;
+            --espresso: #2A2320;
+            --warm-gray: #8A8077;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--espresso);
+            color: var(--cream);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Warm grain texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse at 20% 0%, rgba(212, 146, 11, 0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 100%, rgba(107, 143, 113, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 420px;
+            padding: 40px 28px;
+            text-align: center;
+        }
+
+        /* Book icon */
+        .icon {
+            font-size: 56px;
+            margin-bottom: 8px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 28px;
+            color: var(--amber-light);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: rgba(250, 246, 240, 0.6);
+            line-height: 1.5;
+            margin-bottom: 32px;
+        }
+
+        /* Invite code card */
+        .code-card {
+            background: rgba(212, 146, 11, 0.1);
+            border: 1px solid rgba(212, 146, 11, 0.2);
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-bottom: 28px;
+        }
+
+        .code-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--warm-gray);
+            margin-bottom: 8px;
+        }
+
+        .code-value {
+            font-family: 'DM Serif Display', serif;
+            font-size: 32px;
+            color: var(--amber);
+            letter-spacing: 3px;
+            word-break: break-all;
+        }
+
+        /* Primary CTA */
+        .btn-primary {
+            display: block;
+            width: 100%;
+            padding: 16px 24px;
+            background: var(--amber);
+            color: white;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.15s, box-shadow 0.15s;
+            box-shadow: 0 4px 20px rgba(212, 146, 11, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 28px rgba(212, 146, 11, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 20px 0;
+            color: rgba(250, 246, 240, 0.25);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(250, 246, 240, 0.1);
+        }
+
+        /* Secondary CTA */
+        .btn-secondary {
+            display: block;
+            width: 100%;
+            padding: 14px 24px;
+            background: rgba(107, 143, 113, 0.15);
+            color: var(--sage);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            border: 1px solid rgba(107, 143, 113, 0.25);
+            border-radius: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(107, 143, 113, 0.25);
+        }
+
+        .footer-note {
+            margin-top: 32px;
+            font-size: 13px;
+            color: rgba(250, 246, 240, 0.3);
+            line-height: 1.5;
+        }
+
+        .footer-note a {
+            color: var(--amber);
+            text-decoration: none;
+        }
+
+        /* Status messages */
+        .status {
+            display: none;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .status.opening {
+            display: block;
+            background: rgba(107, 143, 113, 0.15);
+            color: var(--sage);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .status.fallback {
+            display: block;
+            background: rgba(193, 123, 84, 0.12);
+            color: var(--terracotta);
+        }
+
+        /* Manual code copy */
+        .copy-hint {
+            display: none;
+            margin-top: 16px;
+            padding: 14px;
+            background: rgba(250, 246, 240, 0.04);
+            border-radius: 12px;
+            font-size: 13px;
+            color: rgba(250, 246, 240, 0.5);
+        }
+
+        .copy-hint code {
+            display: block;
+            margin-top: 6px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--amber);
+            letter-spacing: 2px;
+            cursor: pointer;
+        }
+
+        .copy-hint code:hover {
+            color: var(--amber-light);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">📖</div>
+        <h1>You're Invited!</h1>
+        <p class="subtitle">Someone wants you to join their family cookbook on Generations of Flavor</p>
+
+        <div class="code-card" id="codeCard">
+            <div class="code-label">Invite Code</div>
+            <div class="code-value" id="codeDisplay">—</div>
+        </div>
+
+        <div class="status" id="statusMsg"></div>
+
+        <a href="#" class="btn-primary" id="openAppBtn" onclick="openApp(); return false;">
+            Open in App
+        </a>
+
+        <div class="divider">or</div>
+
+        <a href="#" class="btn-secondary" id="downloadBtn">
+            Download Generations of Flavor
+        </a>
+
+        <div class="copy-hint" id="copyHint">
+            Already have the app? Open it and enter this code:
+            <code id="copyCode" onclick="copyCode()">—</code>
+        </div>
+
+        <p class="footer-note">
+            Generations of Flavor is a family cookbook app where families share
+            and preserve their recipes together.<br><br>
+            <a href="https://generationsofflavor.app">Learn more</a>
+        </p>
+    </div>
+
+    <script>
+        // Extract invite code from URL path: /join/CODE or /join/?code=CODE
+        function getInviteCode() {
+            const path = window.location.pathname;
+            const segments = path.split('/').filter(Boolean);
+
+            // /join/VACURA-7X3K → segments = ["join", "VACURA-7X3K"]
+            if (segments.length >= 2 && segments[0] === 'join') {
+                return segments[1].toUpperCase();
+            }
+
+            // Fallback: ?code=VACURA-7X3K
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('code');
+            if (code) return code.toUpperCase();
+
+            return null;
+        }
+
+        const inviteCode = getInviteCode();
+        const codeDisplay = document.getElementById('codeDisplay');
+        const copyCode = document.getElementById('copyCode');
+        const statusMsg = document.getElementById('statusMsg');
+        const copyHint = document.getElementById('copyHint');
+
+        if (inviteCode) {
+            codeDisplay.textContent = inviteCode;
+            document.getElementById('copyCode').textContent = inviteCode;
+        } else {
+            codeDisplay.textContent = 'No code found';
+        }
+
+        // Play Store URL (update when published)
+        const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.jake.familycookbook';
+        // For now, since not on store yet, point to the website
+        document.getElementById('downloadBtn').href = playStoreUrl;
+
+        function openApp() {
+            if (!inviteCode) {
+                statusMsg.className = 'status fallback';
+                statusMsg.textContent = 'No invite code found in the link.';
+                return;
+            }
+
+            // Show "opening" status
+            statusMsg.className = 'status opening';
+            statusMsg.textContent = 'Opening Generations of Flavor...';
+
+            // Try the custom scheme deep link
+            const deepLink = 'familycookbook://join/' + inviteCode;
+
+            // Use an iframe trick for reliability across browsers
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = deepLink;
+            document.body.appendChild(iframe);
+
+            // Also try window.location as backup
+            setTimeout(function() {
+                window.location.href = deepLink;
+            }, 100);
+
+            // If still here after 1.5 seconds, app probably isn't installed
+            setTimeout(function() {
+                document.body.removeChild(iframe);
+                statusMsg.className = 'status fallback';
+                statusMsg.textContent = "Couldn't open the app. You may need to download it first.";
+                copyHint.style.display = 'block';
+            }, 1500);
+        }
+
+        function copyCode() {
+            if (inviteCode && navigator.clipboard) {
+                navigator.clipboard.writeText(inviteCode).then(function() {
+                    document.getElementById('copyCode').textContent = 'Copied!';
+                    setTimeout(function() {
+                        document.getElementById('copyCode').textContent = inviteCode;
+                    }, 2000);
+                });
+            }
+        }
+
+        // Auto-attempt to open app on mobile
+        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        if (isMobile && inviteCode) {
+            // Small delay to let the page render first
+            setTimeout(openApp, 500);
+        }
+    </script>
+</body>
+</html>
